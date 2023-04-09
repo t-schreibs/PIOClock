@@ -40,7 +40,7 @@ class ClockTest:
 
     def main(self):
         # Select the test loop you'd like to run here:
-        self.TestRandomPitches(1, 5000)
+        self.TestRandomPitches(1, 1000)
         # self.TestPitch(50)
         # self.TestSlide(0.25, 1, 5000)
 
