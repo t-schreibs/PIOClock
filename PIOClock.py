@@ -1,5 +1,13 @@
-import machine, random, time
+import machine
 from rp2 import PIO, StateMachine, asm_pio
+
+"""
+PIO Clock
+author: Tyler Schreiber (github.com/t-schreibs)
+date: 2023-04-09
+
+A simple square wave clock for the Raspberry Pi Pico.
+"""
 
 
 # Assembly code program for the PIO square oscillator
@@ -35,7 +43,7 @@ def square_prog():
 
 
 # Class for managing a state machine running the PIO oscillator program
-class PIOClock:
+class Clock:
     def __init__(self, state_machine_id, pin_number):
         # PIO settings
         max_count = 50_000_000
@@ -54,6 +62,7 @@ class PIOClock:
         self._max_count = max_count
         self._count_freq = count_freq
 
+    # Sets the Hertz value of the clock - use this to change the value
     def set(self, hertz):
         value = self.get_pitch(hertz)
         # Minimum value is -1 (completely turn off), 0 actually still
@@ -61,33 +70,11 @@ class PIOClock:
         value = self.clamp(value, -1, self._max_count)
         self._sm.put(value)
 
-    def clamp(self, num, min_value, max_value):
-        return max(min(num, max_value), min_value)
+    # Clamps the value between the min and max values provided
+    def clamp(self, value, min_value, max_value):
+        return max(min(value, max_value), min_value)
 
     # Converts Hertz to the value the state machine running the PIO
     # program needs
     def get_pitch(self, hertz):
         return int(-1 * (((self._count_freq / hertz) - (self._max_count * 4)) / 4))
-
-
-class ClockTest:
-    def __init__(self):
-        self.clocks = [
-            PIOClock(0, 21),
-            PIOClock(1, 20),
-            PIOClock(2, 16),
-            PIOClock(3, 17),
-            PIOClock(4, 18),
-            PIOClock(5, 19),
-        ]
-
-    def main(self):
-        while True:
-            for clock in self.clocks:
-                clock.set(random.randint(1, 10000))
-            time.sleep(5)
-
-
-# Test script execution
-if __name__ == "__main__":
-    ClockTest().main()
