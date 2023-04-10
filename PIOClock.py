@@ -51,7 +51,7 @@ class Clock:
         self._sm = StateMachine(
             state_machine_id,
             square_prog,
-            freq=2 * count_freq,
+            freq=count_freq,
             sideset_base=machine.Pin(pin_number),
         )
         # Use exec() to load max count into ISR
