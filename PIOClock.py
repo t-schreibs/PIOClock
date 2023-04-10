@@ -62,7 +62,7 @@ class Clock:
         self._max_count = max_count
         self._count_freq = count_freq
 
-    # Sets the Hertz value of the clock - use this to change the value
+    # Sets the hertz value of the clock - use this to change the value
     def set(self, hertz):
         value = self.get_pitch(hertz)
         # Minimum value is -1 (completely turn off), 0 actually still
@@ -74,7 +74,7 @@ class Clock:
     def clamp(self, value, min_value, max_value):
         return max(min(value, max_value), min_value)
 
-    # Converts Hertz to the value the state machine running the PIO
+    # Converts hertz to the value the state machine running the PIO
     # program needs
     def get_pitch(self, hertz):
         return int(-1 * (((self._count_freq / hertz) - (self._max_count * 4)) / 4))
